@@ -1,6 +1,8 @@
 from code.Rating import get_kr, get_nice, get_kis
+
 import multiprocessing
 import xlwings as xw
+
 from datetime import datetime
 
 

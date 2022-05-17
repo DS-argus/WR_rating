@@ -1,4 +1,5 @@
 from code.Rating import get_kr, get_nice, get_kis
+
 import multiprocessing
 
 
@@ -28,26 +29,12 @@ def get_ratings():
     pool.close()
     pool.join()
 
-    print(a1)
-    print(a2)
-    print(a3)
-    """
-    MSSQL에 저장
-    업데이트 날짜를 추가하여 계속해 데이터가 누적되도록 작성
-    약 일주일 주기로 필요한 날 이전에 업데이트 되도록. ex) 제안서 작성하는 전날
-
-    TABLE : drv.rating
-
-    FIELD = [AGENCY VARCHAR(20) NOT NULL PRIMARY KEY, 
-            ISSUER VARCHAR(20) NOT NULL PRIMARY KEY,
-            TYPE VARCHAR(20) NOT NULL PRIMARY KEY, 
-            RATING VARCHAR(20) NOT NULL, 
-            OUTLOOK VARCHAR(20), 
-            EVAL_DATE VARCHAR(20) NOT NULL
-            UPDATE_DATE VARCHAR(20) NOT NULL PRIMARY KEY] 
-
-    """
+    return a1, a2, a3
 
 
 if __name__ == "__main__":
-    get_ratings()
+    kr, nice, kis = get_ratings()
+
+    print(kr)
+    print(nice)
+    print(kis)

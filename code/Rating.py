@@ -1,8 +1,10 @@
+from code.Info import Urlinfo, Codeinfo
+
 import pandas as pd
 import requests
-from bs4 import BeautifulSoup
-from code.Info import Urlinfo, Codeinfo
 import urllib3
+
+from bs4 import BeautifulSoup
 from datetime import date
 
 urllib3.disable_warnings()
