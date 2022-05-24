@@ -46,6 +46,7 @@ class DBRating:
         try:
             print("Crawling data...")
             df_kr, df_nice, df_kis = get_ratings()
+
         except:
             print("Error occured when crawling data")
             return
@@ -58,8 +59,10 @@ class DBRating:
 
     @staticmethod
     def create_insertible(dat: pd.DataFrame):
+
         if dat is None:
             return None
+
         result = list()
         for idx in dat.index:
             seg = dat.loc[idx]
@@ -71,8 +74,9 @@ class DBRating:
         return result
 
     def run(self):
-        print("Inserting Data")
         dat = self.get_data()
+
+        print("Inserting Data")
 
         insert_ = self.create_insertible(dat)
 
@@ -87,7 +91,7 @@ class DBRating:
                     schema='dbo',
                     database='WSOL',
                     col_=['AGENCY', 'ISSUER', 'TYPE', 'Rating', 'OUTLOOK', 'EVAL_DATE', 'UPDATE_DATE'],
-                    rows_=insert_
+                    rows_=[line]
                 )
 
             except pymssql._pymssql.IntegrityError:

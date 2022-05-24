@@ -149,7 +149,7 @@ class MSSQL:
         rows = ', '.join('%s' for _ in col_)
 
         qry = f"insert into {table_name} ({columns}) values ({rows})"
-        print(qry)
+
         c = self.conn.cursor()
         c.execute(announce)
         c.executemany(qry, rows_)
@@ -182,7 +182,6 @@ class MSSQL:
 
         if groupby is not None:
             qry = f"{qry} group by {groupby}"
-        # print(qry)
 
         # SQL Execution
         c = self.conn.cursor()
@@ -197,8 +196,3 @@ if __name__ == '__main__':
     # Login Test
 
     c.login(id=get_token("id"), pw=get_token('pw'))
-
-    # tcol1 = ['FUND_ID', 'QTY_BEF', 'QTY_TR', 'QTY_CA', 'SEC_ID']
-    # tcol2 = ['STK_CD', 'ISIN_CD']
-    # var1 = c.select_db("WOORIFS", "dbo", "BMKA1000", column=tcol1, condition="PR_DATE=20210929 and SEC_ID='KR7089860001'")
-    # var2 = c.select_db("WFNS2DB", "", "TS_STOCK", column=tcol2)

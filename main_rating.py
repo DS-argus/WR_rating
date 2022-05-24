@@ -13,9 +13,6 @@ def func_for_multi(name):
 
 
 def get_ratings():
-    """
-    pool.map() 에 실행 함수의 결과가 list 형태로 저장됨 -> pool이 close되면 사라지니 다른 변수에 저장해두고 활용
-    """
 
     name_list = ['kr', 'nice', 'kis']
 
