@@ -148,7 +148,7 @@ class MSSQL:
         columns = ', '.join(str(_) for _ in col_)
         rows = ', '.join('%s' for _ in col_)
 
-        qry = f"insert into {table_name} ({columns}) values ({rows})"
+        qry = f"insert into {schema}.{table_name} ({columns}) values ({rows})"
 
         c = self.conn.cursor()
         c.execute(announce)

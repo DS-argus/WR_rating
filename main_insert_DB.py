@@ -44,14 +44,14 @@ class DBRating:
     @staticmethod
     def get_data():
         try:
-            print("Crawling data...")
+            print("Get data...")
             df_kr, df_nice, df_kis = get_ratings()
 
         except:
             print("Error occured when crawling data")
             return
 
-        print("Crawling completed")
+        print("Success")
 
         df_total = pd.concat([df_kr, df_nice, df_kis], ignore_index=True)
 
@@ -88,7 +88,7 @@ class DBRating:
             try:
                 self.server.insert_row(
                     table_name='rating',
-                    schema='dbo',
+                    schema='drv',
                     database='WSOL',
                     col_=['AGENCY', 'ISSUER', 'TYPE', 'Rating', 'OUTLOOK', 'EVAL_DATE', 'UPDATE_DATE'],
                     rows_=[line]
@@ -98,6 +98,8 @@ class DBRating:
                 print(f'{duples + 1}. [{line[0]} & {line[1]} & {line[2]} & {line[6]}] is already in the table')
                 duples += 1
                 continue
+
+        print("Success")
 
 
 if __name__ == "__main__":
