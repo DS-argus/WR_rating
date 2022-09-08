@@ -1,4 +1,5 @@
 from code.Info import Urlinfo, Codeinfo
+from code.SSLpatch import no_ssl_verification
 
 import pandas as pd
 import requests
@@ -6,6 +7,13 @@ import urllib3
 
 from bs4 import BeautifulSoup
 from datetime import date
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 urllib3.disable_warnings()
 
@@ -44,6 +52,11 @@ def get_kis():
 
 def get_kr():
 
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    options.add_argument('window-size=1920x1080')
+    options.add_argument("disable-gpu")
+
     kr_url = Urlinfo.kr_url
     kr_code = Codeinfo.kr_code
 
@@ -52,28 +65,39 @@ def get_kr():
 
     i = 1
 
-    for issuer in kr_code:
+    with no_ssl_verification():
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-        response = requests.get(kr_url + kr_code[issuer], verify=False)
+        for issuer in kr_code:
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+            url = kr_url + kr_code[issuer]
+            driver.get(url)
+            driver.maximize_window()
 
-        soup = soup.select_one("div.detail_grid_row div.table_type4")
+            table = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#mySheet9-table > tbody  div > div.GMPageOne > table > tbody")))
+            rows = table.find_elements(by=By.CSS_SELECTOR, value="tr")[1:]
 
-        for tag in soup.select("#tabcont1 div >table>tbody>tr"):
+            for row in rows:
 
-            result_list = ["한국기업평가",
-                           issuer,
-                           tag.select_one("td.border_none").get_text(),
-                           tag.select("td")[4].get_text(),
-                           tag.select("td")[5].get_text(),
-                           tag.select("td.date")[0].get_text().replace(".", "-"),
-                           date.today()
-                           ]
+                type = row.find_elements(by=By.CSS_SELECTOR, value="td")[1].text
+                rating = row.find_elements(by=By.CSS_SELECTOR, value="td")[5].text
+                outlook = row.find_elements(by=By.CSS_SELECTOR, value="td")[6].text
+                eval_date = row.find_elements(by=By.CSS_SELECTOR, value="td")[3].text
 
-            kr_result.loc[i] = result_list
+                result_list = ["한국기업평가",
+                               issuer,
+                               type,
+                               rating,
+                               outlook,
+                               eval_date.replace(".", "-"),
+                               date.today()
+                               ]
 
-            i += 1
+                kr_result.loc[i] = result_list
+
+                i += 1
+
+        driver.quit()
 
     return kr_result
 
@@ -117,3 +141,7 @@ def get_nice():
 if __name__ == "__main__":
 
     print(get_nice())
+
+    print(get_kr())
+
+    print(get_kis())

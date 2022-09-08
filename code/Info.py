@@ -66,6 +66,6 @@ class Codeinfo:
 class Urlinfo:
     nice_url = "https://www.nicerating.com/disclosure/companyGradeInfo.do?cmpCd="
 
-    kr_url = "http://www.rating.co.kr/disclosure/QDisclosure004.do?companyCode="
+    kr_url = "http://www.korearatings.com/cms/frDisclosureCon/compView.do?MENU_ID=90&CONTENTS_NO=1&COMP_CD="
 
     kis_url = "https://www.kisrating.com/ratingsSearch/corp_overview.do?kiscd="
