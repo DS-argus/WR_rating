@@ -4,6 +4,7 @@ from code.SSLpatch import no_ssl_verification
 import pandas as pd
 import requests
 import urllib3
+import time
 
 from bs4 import BeautifulSoup
 from datetime import date
@@ -29,6 +30,8 @@ def get_kis():
 
     for issuer in kis_code:
 
+        # maximum retries 오류 방지 위해
+        time.sleep(3)
         response = requests.get(kis_url + kis_code[issuer], verify=False)
         soup = BeautifulSoup(response.text, 'html.parser')
 
